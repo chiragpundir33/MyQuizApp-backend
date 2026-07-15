@@ -1,5 +1,6 @@
 package com.example.MyQuizApp.controller;
 
+import com.example.MyQuizApp.dto.request.AssignQuizRequest;
 import com.example.MyQuizApp.dto.response.QuizAssignmentResponse;
 import com.example.MyQuizApp.service.QuizAssignmentService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +16,14 @@ public class QuizAssignmentController {
 
     public QuizAssignmentController(QuizAssignmentService quizAssignmentService) {
         this.quizAssignmentService = quizAssignmentService;
+    }
+
+    @PostMapping("/assign")
+    @PreAuthorize("hasRole('ADMIN')")
+    public QuizAssignmentResponse assignQuiz(
+            @RequestBody AssignQuizRequest request
+    ){
+        return quizAssignmentService.assignQuiz(request);
     }
 
     @GetMapping("/user/{userId}")
