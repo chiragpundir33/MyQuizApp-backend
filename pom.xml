@@ -2,8 +2,9 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -32,7 +33,7 @@
     <dependencies>
 
 
-        <!-- Spring Web -->
+        <!-- Spring Web MVC -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
@@ -46,10 +47,10 @@
         </dependency>
 
 
-        <!-- Aiven MySQL Driver -->
+        <!-- PostgreSQL Driver -->
         <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 
@@ -86,7 +87,7 @@
         </dependency>
 
 
-        <!-- JWT Jackson -->
+        <!-- JWT JSON Support -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
@@ -95,17 +96,10 @@
         </dependency>
 
 
-        <!-- Testing -->
+        <!-- Spring Boot Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -117,6 +111,7 @@
     <build>
 
         <plugins>
+
 
             <!-- Spring Boot Maven Plugin -->
             <plugin>
@@ -135,14 +130,17 @@
             </plugin>
 
 
+
             <!-- Java Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
 
                 <configuration>
+
                     <source>21</source>
                     <target>21</target>
+
 
                     <annotationProcessorPaths>
 
@@ -153,12 +151,14 @@
 
                     </annotationProcessorPaths>
 
+
                 </configuration>
 
             </plugin>
 
 
         </plugins>
+
 
     </build>
 
