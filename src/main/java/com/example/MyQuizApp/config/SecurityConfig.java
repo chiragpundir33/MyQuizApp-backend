@@ -130,33 +130,25 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
 
+        .requestMatchers(
+                HttpMethod.OPTIONS,
+                "/**"
+        )
+        .permitAll()
 
-                    // Allow browser preflight
-                    .requestMatchers(
-                            HttpMethod.OPTIONS,
-                            "/**"
-                    )
-                    .permitAll()
+        .requestMatchers("/auth/**")
+        .permitAll()
 
+        .requestMatchers(
+                "/quiz/getAll",
+                "/quiz/getById/**",
+                "/quiz/*/questions"
+        )
+        .permitAll()
 
-                    // Authentication APIs
-                    .requestMatchers("/auth/**")
-                    .permitAll()
-
-
-                    // Public quiz APIs (optional)
-                    .requestMatchers(
-                            "/quiz/getAll",
-                            "/quiz/getById/**",
-                            "/quiz/**/questions"
-                    )
-                    .permitAll()
-
-
-                    // Everything else requires JWT
-                    .anyRequest()
-                    .authenticated()
-            )
+        .anyRequest()
+        .authenticated()
+)
 
 
             .authenticationProvider(authenticationProvider())
