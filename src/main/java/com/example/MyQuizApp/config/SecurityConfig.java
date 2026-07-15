@@ -3,42 +3,58 @@ package com.example.MyQuizApp.config;
 import com.example.MyQuizApp.security.CustomUserDetailsService;
 import com.example.MyQuizApp.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import org.springframework.http.HttpMethod;
+
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
 import org.springframework.security.config.http.SessionCreationPolicy;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import java.util.List;
+
 
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
 
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final CustomUserDetailsService customUserDetailsService;
+
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
+
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "https://myquizapp-frontend-2.onrender.com"
         ));
+
 
         configuration.setAllowedMethods(List.of(
                 "GET",
@@ -48,11 +64,14 @@ public class SecurityConfig {
                 "OPTIONS"
         ));
 
+
         configuration.setAllowedHeaders(List.of("*"));
+
 
         configuration.setExposedHeaders(List.of(
                 "Authorization"
         ));
+
 
         configuration.setAllowCredentials(true);
 
@@ -60,7 +79,9 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 
+
         source.registerCorsConfiguration("/**", configuration);
+
 
         return source;
     }
@@ -69,8 +90,11 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
+
+
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -90,34 +114,64 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
 
+
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .csrf(csrf -> csrf.disable())
 
-                .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(
-                                org.springframework.http.HttpMethod.OPTIONS,
-                                "/**"
-                        ).permitAll()
+            .sessionManagement(session ->
+                    session.sessionCreationPolicy(
+                            SessionCreationPolicy.STATELESS
+                    )
+            )
 
-                        .requestMatchers("/auth/**").permitAll()
 
-                        .anyRequest().authenticated()
-                )
+            .authorizeHttpRequests(auth -> auth
 
-                .authenticationProvider(authenticationProvider())
 
-                .addFilterBefore(
-                        jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                );
+                    // Allow browser preflight
+                    .requestMatchers(
+                            HttpMethod.OPTIONS,
+                            "/**"
+                    )
+                    .permitAll()
+
+
+                    // Authentication APIs
+                    .requestMatchers("/auth/**")
+                    .permitAll()
+
+
+                    // Public quiz APIs (optional)
+                    .requestMatchers(
+                            "/quiz/getAll",
+                            "/quiz/getById/**",
+                            "/quiz/**/questions"
+                    )
+                    .permitAll()
+
+
+                    // Everything else requires JWT
+                    .anyRequest()
+                    .authenticated()
+            )
+
+
+            .authenticationProvider(authenticationProvider())
+
+
+            .addFilterBefore(
+                    jwtAuthenticationFilter,
+                    UsernamePasswordAuthenticationFilter.class
+            );
+
 
         return http.build();
     }
+
+
 
     @Bean
     public AuthenticationManager authenticationManager(
