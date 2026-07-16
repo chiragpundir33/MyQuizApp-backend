@@ -142,7 +142,8 @@ public class SecurityConfig {
         .requestMatchers(
                 "/quiz/getAll",
                 "/quiz/getById/**",
-                "/quiz/*/questions"
+                "/quiz/*/questions",
+                "/quiz/generate-from-video"
         )
         .permitAll()
 

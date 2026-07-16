@@ -182,7 +182,6 @@ public class QuizController {
 
     // USER + ADMIN
     @PostMapping("/generate-from-video")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public QuizResponse generateQuizFromVideo(
             @RequestBody VideoUrlRequest videoUrlRequest
     ){
