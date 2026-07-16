@@ -3,6 +3,7 @@ package com.example.MyQuizApp.service;
 import com.example.MyQuizApp.dto.request.QuizRequest;
 import com.example.MyQuizApp.dto.request.QuizSubmissionRequest;
 import com.example.MyQuizApp.dto.response.*;
+import com.example.MyQuizApp.entity.Quiz;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,5 +34,7 @@ public interface QuizService {
     List<LeaderboardResponse> getLeaderboard();
 
     List<QuizDetailResponse> QuizDetails();
+
+    QuizResponse generateQuizFromVideo(String videoUrl);
 
 }

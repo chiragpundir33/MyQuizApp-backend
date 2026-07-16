@@ -13,6 +13,8 @@ public class QuizResponse{
 
     private String title;
 
+    private String summary;
+
 
 }
 

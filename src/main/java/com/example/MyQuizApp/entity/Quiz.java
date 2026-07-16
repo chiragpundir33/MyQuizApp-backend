@@ -31,5 +31,8 @@ public class Quiz {
 
     private List<Question> questions;
 
+    @Column(columnDefinition = "TEXT")
+    private String summary;
+
 
 }

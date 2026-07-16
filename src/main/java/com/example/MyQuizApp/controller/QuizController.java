@@ -3,6 +3,7 @@ package com.example.MyQuizApp.controller;
 
 import com.example.MyQuizApp.dto.request.QuizRequest;
 import com.example.MyQuizApp.dto.request.QuizSubmissionRequest;
+import com.example.MyQuizApp.dto.request.VideoUrlRequest;
 import com.example.MyQuizApp.dto.response.*;
 import com.example.MyQuizApp.service.QuizService;
 
@@ -178,5 +179,14 @@ public class QuizController {
         return quizService.QuizDetails();
     }
 
+
+    // USER + ADMIN
+    @PostMapping("/generate-from-video")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public QuizResponse generateQuizFromVideo(
+            @RequestBody VideoUrlRequest videoUrlRequest
+    ){
+        return quizService.generateQuizFromVideo(videoUrlRequest.getVideoUrl());
+    }
 
 }
