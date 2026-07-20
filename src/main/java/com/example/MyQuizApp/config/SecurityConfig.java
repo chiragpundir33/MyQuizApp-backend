@@ -52,7 +52,8 @@ public class SecurityConfig {
 
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://myquizapp-frontend-2.onrender.com"
+                "https://myquizapp-frontend-2.onrender.com",
+                "https://my-quiz-app-frontend-eight.vercel.app"
         ));
 
 
